@@ -16,6 +16,10 @@ const INSTALLATION_ID = 12345678;
 const REPO_BACKEND_ID = "550e8400-e29b-41d4-a716-446655440001";
 const REPO_FRONTEND_ID = "550e8400-e29b-41d4-a716-446655440002";
 
+// Real Sentinel repository
+const SENTINEL_INSTALLATION_ID = 106907092;
+const SENTINEL_REPO_ID = "550e8400-e29b-41d4-a716-446655440003";
+
 function sha(input: string): string {
   return createHash("sha256").update(input).digest("hex").slice(0, 40);
 }
@@ -85,15 +89,24 @@ async function seed() {
   ]);
   console.log("✓ Members");
 
-  // 3. GitHub installation
-  await db.insert(githubInstallations).values({
-    orgId: ACME_ORG_ID,
-    installationId: INSTALLATION_ID,
-    accountLogin: "acme-corp",
-    accountType: "organization",
-    installedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-  });
-  console.log("✓ GitHub installation");
+  // 3. GitHub installations
+  await db.insert(githubInstallations).values([
+    {
+      orgId: ACME_ORG_ID,
+      installationId: INSTALLATION_ID,
+      accountLogin: "acme-corp",
+      accountType: "organization",
+      installedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+    },
+    {
+      orgId: ACME_ORG_ID,
+      installationId: SENTINEL_INSTALLATION_ID,
+      accountLogin: "SAY-5",
+      accountType: "user",
+      installedAt: new Date(),
+    },
+  ]);
+  console.log("✓ GitHub installations");
 
   // 4. Repositories
   await db.insert(repositories).values([
@@ -115,11 +128,23 @@ async function seed() {
       name: "web-dashboard",
       defaultBranch: "main",
     },
+    {
+      id: SENTINEL_REPO_ID,
+      orgId: ACME_ORG_ID,
+      installationId: SENTINEL_INSTALLATION_ID,
+      githubId: 1146156526,
+      owner: "SAY-5",
+      name: "Sentinel",
+      defaultBranch: "main",
+      isActive: true,
+      settings: {},
+    },
   ]);
-  console.log("✓ Repositories");
+  console.log("✓ Repositories (including SAY-5/Sentinel)");
 
   // 5. Generate events and attributions for the last 7 days
-  // ALL data goes to BACKEND repo (which the dashboard displays)
+  // ALL data goes to SENTINEL repo (which receives real webhooks)
+  console.log("\nGenerating data for Sentinel repository (SAY-5/Sentinel)");
   const authors = ["jsmith", "agarcia", "mchen", "kwilliams", "lbrown"];
   const filePaths = [
     "src/auth/jwt.ts",
@@ -163,7 +188,7 @@ async function seed() {
   const events: EventRow[] = [];
   const attrs: AttrRow[] = [];
 
-  console.log("\nGenerating data for last 7 days (LA timezone):");
+  console.log("Generating data for last 7 days (LA timezone):");
 
   for (let daysAgo = 0; daysAgo < 7; daysAgo++) {
     const day = getLADateWindow(daysAgo);
@@ -177,7 +202,7 @@ async function seed() {
       
       // Commit event
       events.push({
-        repoId: REPO_BACKEND_ID,
+        repoId: SENTINEL_REPO_ID,
         eventType: "commit",
         timestamp,
         commitSha,
@@ -196,7 +221,7 @@ async function seed() {
       const isSecurityFile = filePath.includes("auth") || filePath.includes("payment");
       
       attrs.push({
-        repoId: REPO_BACKEND_ID,
+        repoId: SENTINEL_REPO_ID,
         commitSha,
         filePath,
         aiConfidence: aiConfidence.toFixed(2),
@@ -219,7 +244,7 @@ async function seed() {
     
     // Open a PR on this day
     events.push({
-      repoId: REPO_BACKEND_ID,
+      repoId: SENTINEL_REPO_ID,
       eventType: "pr_opened",
       timestamp: randomTime(day.start, day.end),
       commitSha: null,
@@ -235,7 +260,7 @@ async function seed() {
       const prevPrNum = prNum - 1; // PR opened on older day
       
       events.push({
-        repoId: REPO_BACKEND_ID,
+        repoId: SENTINEL_REPO_ID,
         eventType: "pr_reviewed",
         timestamp: randomTime(day.start, day.end),
         commitSha: null,
@@ -245,7 +270,7 @@ async function seed() {
       });
       
       events.push({
-        repoId: REPO_BACKEND_ID,
+        repoId: SENTINEL_REPO_ID,
         eventType: "pr_merged",
         timestamp: randomTime(day.start, day.end),
         commitSha: null,
@@ -268,7 +293,7 @@ async function seed() {
   
   await db.insert(incidents).values([
     {
-      repoId: REPO_BACKEND_ID,
+      repoId: SENTINEL_REPO_ID,
       externalId: "INC-001",
       title: "Payment timeout in checkout",
       severity: "sev2",
@@ -282,7 +307,7 @@ async function seed() {
       metadata: {},
     },
     {
-      repoId: REPO_BACKEND_ID,
+      repoId: SENTINEL_REPO_ID,
       externalId: "INC-002",
       title: "Auth endpoint errors",
       severity: "sev3",

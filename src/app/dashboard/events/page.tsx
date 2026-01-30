@@ -4,7 +4,7 @@ import { appRouter } from "@/server/routers/_app";
 import { SkeletonTable } from "@/components/dashboard/skeletons";
 import { formatDistanceToNow } from "@/lib/format";
 
-const REPO_ID = "550e8400-e29b-41d4-a716-446655440001";
+const REPO_ID = "550e8400-e29b-41d4-a716-446655440003"; // SAY-5/Sentinel
 
 const EVENT_TYPE_LABELS: Record<string, { label: string; color: string }> = {
   commit: { label: "Commit", color: "bg-blue-500" },

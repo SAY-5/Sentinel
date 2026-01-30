@@ -11,7 +11,7 @@ import {
   SkeletonTable,
 } from "@/components/dashboard/skeletons";
 
-const REPO_ID = "550e8400-e29b-41d4-a716-446655440001";
+const REPO_ID = "550e8400-e29b-41d4-a716-446655440003"; // SAY-5/Sentinel
 
 async function OverviewMetrics() {
   const ctx = await createTRPCContext();

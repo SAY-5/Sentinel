@@ -50,7 +50,7 @@ export function Sidebar() {
 
       <div className="mt-8 rounded-md border border-zinc-800 bg-zinc-900 p-3">
         <p className="text-xs font-medium text-zinc-400">Repository</p>
-        <p className="mt-1 truncate text-sm">acme-corp/backend-api</p>
+        <p className="mt-1 truncate text-sm">SAY-5/Sentinel</p>
       </div>
     </aside>
   );

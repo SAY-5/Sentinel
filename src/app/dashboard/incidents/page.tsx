@@ -5,7 +5,7 @@ import { SkeletonTable } from "@/components/dashboard/skeletons";
 import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
-const REPO_ID = "550e8400-e29b-41d4-a716-446655440001";
+const REPO_ID = "550e8400-e29b-41d4-a716-446655440003"; // SAY-5/Sentinel
 
 const SEVERITY_CONFIG: Record<string, { label: string; className: string }> = {
   sev1: { label: "SEV1", className: "bg-red-500/20 text-red-300" },
