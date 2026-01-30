@@ -167,7 +167,7 @@ export async function triggerHighRiskDeployAlert(
   const rule = {
     name: "high_risk_deployed",
     severity: "critical" as const,
-    channels: ["slack", "pagerduty"] as const,
+    channels: ["slack", "email", "pagerduty"] as const,
   };
 
   const [created] = await db
@@ -217,7 +217,7 @@ export async function triggerIncidentAiAlert(
   const rule = {
     name: "incident_ai_attributed",
     severity: "critical" as const,
-    channels: ["slack", "pagerduty"] as const,
+    channels: ["slack", "email", "pagerduty"] as const,
   };
 
   const [created] = await db

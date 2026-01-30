@@ -4,6 +4,8 @@ import { db } from "@/server/db/client";
 import { alerts, repositories } from "@/server/db/schema";
 import { createLogger } from "@/lib/logger";
 import { sendSlackAlert } from "@/integrations/slack";
+import { sendEmailAlert } from "@/integrations/email";
+import { sendPagerDutyAlert } from "@/integrations/pagerduty";
 import type { NotificationJobData } from "@/lib/queue";
 
 const log = createLogger({ module: "notification-worker" });
@@ -38,25 +40,31 @@ export async function processNotification(job: Job<NotificationJobData>) {
   }
 
   const channels = alert.channels as string[];
+  const errors: string[] = [];
+  const sent: string[] = [];
 
   for (const channel of channels) {
     try {
       switch (channel) {
         case "slack":
           await sendSlackAlert(alert, repo);
+          sent.push("slack");
           break;
         case "email":
-          jobLog.debug("email channel not implemented");
+          await sendEmailAlert(alert, repo);
+          sent.push("email");
           break;
         case "pagerduty":
-          jobLog.debug("pagerduty channel not implemented");
+          await sendPagerDutyAlert(alert, repo);
+          sent.push("pagerduty");
           break;
         default:
           jobLog.warn({ channel }, "unknown notification channel");
       }
     } catch (err) {
-      jobLog.error({ channel, err: (err as Error).message }, "notification failed");
-      throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      jobLog.error({ channel, error: message }, "notification failed");
+      errors.push(`${channel}: ${message}`);
     }
   }
 
@@ -65,5 +73,13 @@ export async function processNotification(job: Job<NotificationJobData>) {
     .set({ sentAt: new Date() })
     .where(eq(alerts.id, alertId));
 
-  jobLog.info({ channels }, "notification sent");
+  jobLog.info({ sent, failed: errors.length }, "notification processing complete");
+
+  if (errors.length > 0 && sent.length === 0) {
+    throw new Error(`All channels failed: ${errors.join("; ")}`);
+  }
+
+  if (errors.length > 0) {
+    jobLog.warn({ errors }, "partial notification failure");
+  }
 }

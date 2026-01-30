@@ -122,7 +122,7 @@ export const reviewSaturationHigh: AlertRule = {
 export const highRiskDeployed: AlertRule = {
   name: "high_risk_deployed",
   severity: "critical",
-  channels: ["slack", "pagerduty"],
+  channels: ["slack", "email", "pagerduty"],
   evaluate: (_ctx: EvaluationContext): AlertTrigger | null => {
     // This rule is triggered by deploy events, not by metrics
     // It's evaluated separately in the webhook worker
@@ -133,7 +133,7 @@ export const highRiskDeployed: AlertRule = {
 export const incidentAiAttributed: AlertRule = {
   name: "incident_ai_attributed",
   severity: "critical",
-  channels: ["slack", "pagerduty"],
+  channels: ["slack", "email", "pagerduty"],
   evaluate: (_ctx: EvaluationContext): AlertTrigger | null => {
     // This rule is triggered by incident creation, not by metrics
     // It's evaluated separately when incidents are created/updated
