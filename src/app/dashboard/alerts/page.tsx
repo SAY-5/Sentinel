@@ -128,10 +128,10 @@ function TableSkeleton() {
 
 export default function AlertsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-xl font-semibold">Alerts</h1>
-        <p className="text-sm text-zinc-400">
+        <h1 className="text-2xl font-semibold">Alerts</h1>
+        <p className="mt-1 text-sm text-zinc-400">
           Monitor threshold violations and system warnings
         </p>
       </div>
