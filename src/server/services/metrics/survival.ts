@@ -22,7 +22,7 @@ export async function trackSurvival(repoId: string): Promise<SurvivalCheckResult
       commitSha: codeAttribution.commitSha,
       aiConfidence: codeAttribution.aiConfidence,
       riskTier: codeAttribution.riskTier,
-      metadata: codeAttribution.metadata,
+      detectionSignals: codeAttribution.detectionSignals,
     })
     .from(codeAttribution)
     .where(
@@ -40,9 +40,9 @@ export async function trackSurvival(repoId: string): Promise<SurvivalCheckResult
   let skipped = 0;
 
   for (const row of candidates) {
-    const meta = (row.metadata as Record<string, unknown>) || {};
+    const signals = (row.detectionSignals as Record<string, unknown>) || {};
 
-    if (meta.survival_checked_at === today) {
+    if (signals.survival_checked_at === today) {
       skipped++;
       continue;
     }

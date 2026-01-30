@@ -41,6 +41,8 @@ async function EventsTable() {
               color: "bg-zinc-500",
             };
             const metadata = event.metadata as Record<string, unknown>;
+            const message = typeof metadata?.message === "string" ? metadata.message : null;
+            const title = typeof metadata?.title === "string" ? metadata.title : null;
 
             return (
               <tr
@@ -66,14 +68,14 @@ async function EventsTable() {
                   {event.prNumber && (
                     <span className="text-zinc-400">#{event.prNumber}</span>
                   )}
-                  {metadata?.message && (
+                  {message && (
                     <span className="ml-2 text-zinc-300">
-                      {String(metadata.message).slice(0, 50)}
+                      {message.slice(0, 50)}
                     </span>
                   )}
-                  {metadata?.title && (
+                  {title && (
                     <span className="ml-2 text-zinc-300">
-                      {String(metadata.title).slice(0, 50)}
+                      {title.slice(0, 50)}
                     </span>
                   )}
                 </td>
