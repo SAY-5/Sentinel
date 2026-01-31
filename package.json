@@ -12,8 +12,9 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "dotenv -e .env -- tsx src/server/db/seed.ts",
-    "workers": "dotenv -e .env -- tsx src/workers/index.ts",
-    "workers:dev": "dotenv -e .env -- tsx --watch src/workers/index.ts"
+    "workers": "tsx src/workers/index.ts",
+    "workers:dev": "dotenv -e .env -- tsx --watch src/workers/index.ts",
+    "workers:local": "dotenv -e .env -- tsx src/workers/index.ts"
   },
   "dependencies": {
     "@octokit/auth-app": "^8.1.2",
