@@ -2,7 +2,6 @@ import type { CommitData, DetectionSignal } from "../types";
 
 const AI_TOOL_PATTERNS = [
   { pattern: /copilot/i, tool: "Copilot" },
-  { pattern: /cursor/i, tool: "Cursor" },
   { pattern: /claude/i, tool: "Claude" },
   { pattern: /chatgpt/i, tool: "ChatGPT" },
   { pattern: /gpt-4/i, tool: "GPT-4" },

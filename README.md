@@ -6,7 +6,7 @@ Observability and risk management when 40%+ of your codebase is AI-generated.
 
 ## What is this?
 
-Sentinel helps engineering teams understand what happens when most of their code comes from GitHub Copilot, Cursor, Claude, or similar tools.
+Sentinel helps engineering teams understand what happens when most of their code comes from GitHub Copilot, Claude, or similar AI tools.
 
 The problem isn't that AI-generated code is bad. The problem is that nobody knows:
 - How much of the codebase is AI-written

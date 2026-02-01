@@ -158,7 +158,7 @@ This is heuristics, not ML. We considered training a model but the signal-to-noi
 ### Signal Sources
 
 1. **Commit Message** — "Co-authored-by: GitHub Copilot" is a dead giveaway (+0.9). GitHub added this automatically and most people don't remove it.
-2. **PR Description** — Mentions of "copilot", "cursor", "claude", "chatgpt" etc. (+0.7). People love to mention they used AI.
+2. **PR Description** — Mentions of "copilot", "claude", "chatgpt" etc. (+0.7). People love to mention they used AI.
 3. **Velocity** — 500+ lines in under 5 minutes (+0.6). Humans don't type that fast. False positives on large file moves but those are usually obvious.
 4. **Time of Day** — 2-4am commits (+0.3). Weak signal on its own, but correlates. People don't usually write code at 3am unless an AI is helping.
 5. **Code Style** — Generic variable names, excessive comments, boilerplate patterns (+0.4). Harder to tune, lots of edge cases.
