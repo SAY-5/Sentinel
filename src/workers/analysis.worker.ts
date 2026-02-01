@@ -10,18 +10,9 @@ import type { CommitData } from "@/analysis/types";
 
 const log = createLogger({ module: "analysis-worker" });
 
-// Only run AI detection for the Sentinel repository
-const SENTINEL_REPO_ID = "550e8400-e29b-41d4-a716-446655440003";
-
 export async function processAnalysis(job: Job<AnalysisJobData>) {
   const { repoId, commitSha, eventId, installationId, owner, repo } = job.data;
   const jobLog = log.child({ commitSha, repoId });
-
-  // Only analyze commits from the Sentinel repository
-  if (repoId !== SENTINEL_REPO_ID) {
-    jobLog.debug("skipping analysis for non-Sentinel repo");
-    return;
-  }
 
   jobLog.info("starting analysis");
 

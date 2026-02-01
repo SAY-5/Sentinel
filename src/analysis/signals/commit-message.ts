@@ -4,6 +4,7 @@ const COAUTHOR_PATTERNS = [
   /Co-authored-by:\s*.*Copilot/i,
   /Co-authored-by:\s*.*\[bot\]/i,
   /Co-authored-by:\s*.*Claude/i,
+  /Co-authored-by:\s*.*Cursor/i,
 ];
 
 const GENERATED_PATTERNS = [
